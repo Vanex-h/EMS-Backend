@@ -11,50 +11,50 @@ const sequelize = new Sequelize({
 const Employee = sequelize.define(
   "employees",
   {
-    ID: {
+    id: {
       type: Sequelize.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false,
     },
 
-    FirstName: {
+    firstName: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    LastName: {
+    lastName: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    National_id: {
+    national_id: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    Telephone: {
+    telephone: {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
-    Email: {
+    email: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    Department: {
+    department: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    Position: {
+    position: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    Laptop_manufacturer: {
+    laptop_manufacturer: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    Model: {
+    model: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    Serial_number: {
+    serial_number: {
       type: Sequelize.INTEGER,
       allowNull: false,
     },

@@ -5,9 +5,9 @@ const mysqlConnection = require("../database");
 const jwt = require("jsonwebtoken");
 const createEmployee = async (req, res) => {
   try {
-    const {FirstName, LastName, National_id, Telephone, Email, Department, Position, Laptop_manufacturer, Model, Serial_number} = req.body;
+    const {firstName, lastName, national_id, telephone, email, department, position, laptop_manufacturer, model, serial_number} = req.body;
     const insertQuery = `INSERT INTO employees (FirstName, LastName, National_id, Telephone, Email, Department, Position, Laptop_manufacturer, Model, Serial_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-    const newEmployeeValues = [FirstName, LastName, National_id, Telephone, Email, Department, Position, Laptop_manufacturer, Model, Serial_number];
+    const newEmployeeValues = [firstName, lastName, national_id, telephone, email, department, position, laptop_manufacturer, model, serial_number];
     await mysqlConnection.connection.query(insertQuery, newEmployeeValues);
     return res.status(200).json({ message: "Employee added successfully" });
   } catch (error) {
