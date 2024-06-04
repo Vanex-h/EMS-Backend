@@ -5,6 +5,7 @@ const {
   getAllUsers,
   getUserById,
   userLogin,
+  getUserProfile
 } = require("../controllers/users.controller");
 
 const express = require("express");
@@ -20,6 +21,7 @@ router.post("/login", userLogin);
 router.use(isAuthenticated);
 
 router.get("/", getAllUsers);
+router.get("/profile", getUserProfile);
 router.route("/:id").put(updateUser).delete(deleteUserById).get(getUserById);
 
 module.exports = router;

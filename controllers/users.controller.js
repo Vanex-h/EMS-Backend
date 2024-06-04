@@ -24,10 +24,10 @@ const createUser = async (req, res) => {
 };
 
 const userLogin = async (req, res) => {
-    const { email, password } = req.body;
-
+    const { username, password } = req.body;
+    console.log(req.body)
     const getQuery = `SELECT * FROM users WHERE email = ?`;
-    const userValues = [email];
+    const userValues = [username];
     
     mysqlConnection.connection.query(getQuery, userValues, (err, result) => {
       if (err) {
@@ -83,13 +83,11 @@ const getUserById = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const id = req.params;
-    const { Names, Email, Telephone } = req.body;
+    const { email } = req.body;
     const user = await User.findOne(id);
     if (user) {
       await user.update({
-        Names,
-        Email,
-        Telephone,
+        email
       });
       return res.json({ message: "User updated successfully", user });
     } else {
@@ -115,10 +113,10 @@ const deleteUserById = async (req, res) => {
   }
 };
 
-const getUserProfile = async (res, req) => {
-  const id = req.body.id;
-  const User = await User.findOne(id);
-  return res.status(200).json({ message: "User profile found", User });
+const getUserProfile = async (req, res) => {
+  console.log(" User ====>", req.user)
+  const user = await User.findByPk(req.user.id);
+  return res.status(200).json({ message: "User profile found", user });
 };
 
 module.exports = {
