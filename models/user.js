@@ -11,51 +11,43 @@ const sequelize = new Sequelize({
 const User = sequelize.define(
   "users",
   {
-    ID: {
+    id: {
       type: Sequelize.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false,
     },
-    Names: {
+    email: {
       type: Sequelize.STRING,
       allowNull: false,
+      unique: true, // Ensure email is unique
+      validate: {
+        isEmail: true, // Validate email format
+      },
     },
-    Email: {
+    password: {
       type: Sequelize.STRING,
       allowNull: false,
-    },
-    Telephone: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    Password: {
-      type: Sequelize.STRING,
-      allowNull: false,
+      validate: {
+        len: [6, 255], // Validate password length
+      },
     },
   },
   {
     timestamps: false,
     indexes: [
       {
-        name: "tb_Names",
-        fields: ["Names"],
-      },
-      {
         name: "tb_email",
-        fields: ["Email"],
-      },
-      {
-        name: "tb_telephone",
-        fields: ["Telephone"],
+        fields: ["email"],
       },
       {
         name: "tb_password",
-        fields: ["Password"],
+        fields: ["password"],
       },
     ],
   }
 );
+
 
 User.sync({ alter: true })
   .then(() => {

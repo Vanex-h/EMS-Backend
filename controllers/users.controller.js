@@ -3,24 +3,59 @@ const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const mysqlConnection = require("../database");
 const jwt = require("jsonwebtoken");
+
 const createUser = async (req, res) => {
   try {
-    const { Names, Email, Telephone, Password } = req.body;
-    const passHashed = await bcrypt.hash(Password, 10);
+    const { email, password } = req.body;
+    const passHashed = await bcrypt.hash(password, 10);
     console.log(passHashed);
-    const insertQuery = `INSERT INTO users (Names, Email, Telephone, Password) VALUES (?, ?, ?, ?)`;
-    const newUserValues = [Names, Email, Telephone, passHashed];
-    await mysqlConnection.connection.query(insertQuery, newUserValues);
-    return res.status(200).json({ message: "User added successfully" });
+    const insertQuery = `INSERT INTO users (email, password) VALUES (?, ?)`;
+    const newUserValues = [email, passHashed];
+    mysqlConnection.connection.query(insertQuery, newUserValues, (err, result) => {
+      if (err) {
+        return res.status(400).json({ error: 'Error signing up' });
+      }
+      res.status(201).json({ message: 'Signup successful' });
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Internal Server error" });
   }
 };
 
+const userLogin = async (req, res) => {
+    const { email, password } = req.body;
+
+    const getQuery = `SELECT * FROM users WHERE email = ?`;
+    const userValues = [email];
+    
+    mysqlConnection.connection.query(getQuery, userValues, (err, result) => {
+      if (err) {
+        return res.status(500).json({ error: 'Error finding user' });
+      }
+      if (result.length === 0) {
+        return res.status(401).json({ error: 'Invalid email or password' });
+      }
+      const user = result[0];
+      bcrypt.compare(password, user.password, (err, isMatch) => {
+        if (err) {
+          return res.status(500).json({ error: 'Error comparing passwords' });
+        }
+        if (!isMatch) {
+          return res.status(401).json({ error: 'Invalid email or password' });
+        }
+        const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        res.status(200).json({ token });
+      });
+    });
+}
+
+
 const getAllUsers = async (req, res) => {
   try {
-    const data = await User.findAll();
+    const data = await User.findAll({
+      attributes: ['id', 'email']
+    });
     console.log(data);
     return res.json(data);
   } catch (error) {
@@ -28,6 +63,7 @@ const getAllUsers = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
 
 const getUserById = async (req, res) => {
   try {
@@ -75,33 +111,6 @@ const deleteUserById = async (req, res) => {
       return res.status(404).json({ message: "That User doesn't exist" });
     }
   } catch (error) {
-    return res.status(500).json({ message: "Server error" });
-  }
-};
-
-const userLogin = async (req, res) => {
-  try {
-    const { Email, Password } = req.body;
-    const user = await User.findOne({ where: { Email } });
-    if (!user) {
-      return res.status(404).json({ message: "Invalid credentials" });
-    }
-    const passwordMatch = await bcrypt.compare(Password, user.Password);
-    if (!passwordMatch) {
-      return res.status(404).json({ message: "Invalid credentials" });
-    }
-    const token = jwt.sign(
-      {
-        id: user.ID,
-        Names: user.Names,
-        Email: user.Email,
-        Telephone: user.Telephone,
-      },
-      process.env.JWT_SECRET
-    );
-    return res.status(200).json({ message: "Login successful", token });
-  } catch (error) {
-    console.log(error);
     return res.status(500).json({ message: "Server error" });
   }
 };

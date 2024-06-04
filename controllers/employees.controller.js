@@ -3,6 +3,7 @@ const Employee = require("../models/employee");
 const bcrypt = require("bcrypt");
 const mysqlConnection = require("../database");
 const jwt = require("jsonwebtoken");
+
 const createEmployee = async (req, res) => {
   try {
     const {firstName, lastName, national_id, telephone, email, department, position, laptop_manufacturer, model, serial_number} = req.body;
