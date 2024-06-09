@@ -3,10 +3,11 @@ const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const mysqlConnection = require("../database");
 const jwt = require("jsonwebtoken");
+const { CreateUser } = require("../schemas/UserValidationSchema");
 
 const createUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = await CreateUser.validateAsync(req.body);
     const passHashed = await bcrypt.hash(password, 10);
     console.log(passHashed);
     const insertQuery = `INSERT INTO users (email, password) VALUES (?, ?)`;
@@ -17,9 +18,10 @@ const createUser = async (req, res) => {
       }
       res.status(201).json({ message: 'Signup successful' });
     });
-  } catch (error) {
+  } catch (error) { 
     console.log(error);
-    return res.status(500).json({ message: "Internal Server error" });
+    let message = error instanceof Error ? error.message : error;
+    return res.status(500).json({ message: message });
   }
 };
 
