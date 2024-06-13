@@ -31,7 +31,7 @@ const Employee = sequelize.define(
       allowNull: false,
     },
     telephone: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.STRING,
       allowNull: false,
     },
     email: {

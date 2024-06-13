@@ -3,10 +3,11 @@ const Employee = require("../models/employee");
 const bcrypt = require("bcrypt");
 const mysqlConnection = require("../database");
 const jwt = require("jsonwebtoken");
+const { CreateEmployee } = require("../schemas/EmployeeValidationSchema");
 
 const createEmployee = async (req, res) => {
   try {
-    const {firstName, lastName, national_id, telephone, email, department, position, laptop_manufacturer, model, serial_number} = req.body;
+    const {firstName, lastName, national_id, telephone, email, department, position, laptop_manufacturer, model, serial_number} = await CreateEmployee.validateAsync(req.body);
     const insertQuery = `INSERT INTO employees (FirstName, LastName, National_id, Telephone, Email, Department, Position, Laptop_manufacturer, Model, Serial_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
     const newEmployeeValues = [firstName, lastName, national_id, telephone, email, department, position, laptop_manufacturer, model, serial_number];
     await mysqlConnection.connection.query(insertQuery, newEmployeeValues);

@@ -49,17 +49,14 @@
                 "produces": [
                     "application/json"
                 ],
-                "security": [{
-                    "bearerAuth": "-[]"
-                }],
                 "parameters": [
-                    {
+                    {   
                         "in": "body",
                         "name": "body",
                         "description": "User object that needs to be added",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "$ref": "#/definitions/UserSignUp"
                         }
                     }
                 ],
@@ -67,26 +64,64 @@
                     "200": {
                         "description": "successful operation",
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "$ref": "#/definitions/UserSignUp"
                         }
                     }
                 }
             }
         },
-        "/employees" : {
+        "/users/login":{
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Login User",
+                "description": "Login User",
+                "operationId": "userLogin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"  
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "User object that needs to be added",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/UserLogin"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "$ref": "#/definitions/UserLogin"
+                        }
+                    }
+                }
+            }
+        },
+        "/employees/new" : {
             "post" : {
                 "tags": [
                     "Employee"
                 ],
-                "summary": "Create User",
-                "description": "Create User",
-                "operationId": "createUser",
+                "summary": "Create Employee",
+                "description": "Create employee",
+                "operationId": "createEmployee",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
+                "security": [{
+                    "bearerAuth": "[]"
+                }], 
                 "parameters": [
                     {
                         "in": "body",
@@ -97,12 +132,48 @@
                             "$ref": "#/definitions/Employee"
                         }
                     }
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "$ref": "#/definitions/Employee"
+                        }
+                    }
+                }
+            }
+        },
+        "/employees" : {
+            "get" : {
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "Get all employees",
+                "description": "Get all employees",
+                "operationId": "getAllEmployees",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "security": [{
+                    "bearerAuth": "[]"
+                }], 
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "$ref": "#/definitions/Employee"
+                        }
+                    }
+                }
             }
         }
+    
     },
     "definitions": {
-        "User": {
+        "UserSignUp": {
             "type": "object",
             "properties": {
                 "email": {
@@ -113,20 +184,49 @@
                 }
             }
         },
+        "UserLogin": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
         "Employee" : {
             "type": "object",
             "properties": {
-                "name": {
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "national_id": {
+                    "type": "string"
+                },
+                "telephone": {
                     "type": "string"
                 },
                 "email": {
                     "type": "string"
                 },
-                "phone": {
+                "department": {
                     "type": "string"
                 },
                 "position": {
                     "type": "string"
+                },
+                "laptop_manufacturer": {
+                    "type": "string"
+                },
+                "model": {
+                    "type": "string"
+                },
+                "serial_number": {
+                    "type": "number"
                 }
             }
         }

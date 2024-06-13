@@ -36,7 +36,7 @@ const userLogin = async (req, res) => {
         return res.status(500).json({ error: 'Error finding user' });
       }
       if (result.length === 0) {
-        return res.status(401).json({ error: 'Invalid email or password' });
+        return res.status(400).json({ error: 'Invalid email or password' });
       }
       const user = result[0];
       bcrypt.compare(password, user.password, (err, isMatch) => {
