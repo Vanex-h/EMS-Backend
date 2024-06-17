@@ -84,9 +84,9 @@ const getUserById = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const id = req.params;
+    const {id} = req.params;
     const { email } = req.body;
-    const user = await User.findOne(id);
+    const user = await User.findByPk(id);
     if (user) {
       await user.update({
         email
@@ -103,7 +103,7 @@ const updateUser = async (req, res) => {
 const deleteUserById = async (req, res) => {
   try {
     const id = req.params;
-    const user = await User.findOne(id);
+    const user = await User.findByPk(id);
     if (user) {
       await user.destroy();
       res.status(200).json({ message: "Successfully deleted the User" });

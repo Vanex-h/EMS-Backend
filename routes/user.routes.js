@@ -23,5 +23,5 @@ router.use(isAuthenticated);
 router.get("/", getAllUsers);
 router.get("/profile", getUserProfile);
 router.route("/:id").put(updateUser).delete(deleteUserById).get(getUserById);
-
+  
 module.exports = router;

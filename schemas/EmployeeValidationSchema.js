@@ -10,9 +10,7 @@ const CreateEmployee = joi.object({
     laptop_manufacturer: joi.string().required(),
     model: joi.string().required(),
     serial_number: joi.number().required(),
-
-   
-});
+}).options({abortEarly:false, allowUnknown:true});
 module.exports = {
     CreateEmployee,
 }

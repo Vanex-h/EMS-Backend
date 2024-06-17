@@ -5,7 +5,7 @@ const { connectingToDb } = require("./database");
 const Routes = require("./routes");
 const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
-const swaggerJsonDoc = require("./swagger.json");
+const swaggerJsonDoc = require("./swagger/doc/swagger.json");
 const morgan = require("morgan");
 const PORT = 1500;
 
